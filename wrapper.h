@@ -25,7 +25,7 @@ public:
 
     void select(string_view, ...);
     vector<string> get(); // get row
-    void show();
+    void show(); // print rows
 
     int execute(string_view, ...);
     string value(string_view, ...);

@@ -71,7 +71,6 @@ vector<string> SQLite::get() {
             size_t count = names.size();
             for (int i = 0; i < count; i++) {
                 // unsigned char* -> char*
-//                const char* str = reinterpret_cast<const char*>(sqlite3_column_text(query, i));
                 string data =  reinterpret_cast<const char*>(sqlite3_column_text(query, i));
                 row.push_back(data);
             }

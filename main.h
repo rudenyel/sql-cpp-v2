@@ -9,6 +9,7 @@ void DisplayData(SQLite&);
 void Books(SQLite&);
 void BooksSortByAuthor(SQLite&);
 void BooksSortByTitle(SQLite&);
+void BooksSortByYear(SQLite&);
 void BooksFindByAuthor(SQLite&);
 void BooksFindByTitle(SQLite&);
 void BookAdd(SQLite&);

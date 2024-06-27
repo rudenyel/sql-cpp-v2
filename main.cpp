@@ -17,22 +17,25 @@ auto queryCreateTable =
     "title VARCHAR(127) CHECK(title != ''),"
     "first_name VARCHAR(127) CHECK(first_name != ''),"
     "last_name VARCHAR(127) CHECK(last_name != ''),"
+    "year INTEGER DEFAULT 0"
     ")"
 ;
 
-auto queryBooks = "SELECT * FROM books";
-auto queryBooksSortByAuthor = "SELECT * FROM books ORDER BY last_name, title";
-auto queryBooksSortByTitle = "SELECT * FROM books ORDER BY title, last_name";
-auto queryBooksFindByAuthor = "SELECT * FROM books WHERE last_name LIKE ?";
-auto queryBooksFindByTitle = "SELECT * FROM books WHERE title LIKE ?";
-auto queryBookAdd = "INSERT INTO books (title, first_name, last_name) VALUES (?, ?, ?)";
-auto queryBookDelete = "DELETE FROM books WHERE id = ?";
-auto queryBooksDropTable = "DROP TABLE IF EXISTS books";
+const char* queryBooks = "SELECT * FROM books";
+const char* queryBooksSortByAuthor = "SELECT * FROM books ORDER BY last_name, title";
+const char* queryBooksSortByTitle = "SELECT * FROM books ORDER BY title, last_name";
+const char* queryBooksSortByYear = "SELECT * FROM books ORDER BY year, title";
+const char* queryBooksFindByAuthor = "SELECT * FROM books WHERE last_name LIKE ?";
+const char* queryBooksFindByTitle = "SELECT * FROM books WHERE title LIKE ?";
+const char* queryBookAdd = "INSERT INTO books (title, first_name, last_name, year) VALUES (?, ?, ?, ?)";
+const char* queryBookDelete = "DELETE FROM books WHERE id = ?";
+const char* queryBooksDropTable = "DROP TABLE IF EXISTS books";
 
 const char* menu[] = {
     "List books",
     "List books (sort by author)",
     "List books (sort by title)",
+    "List books (sort by year)",
     "Find books by author",
     "Find books by title",
     "Add book",
@@ -44,6 +47,7 @@ function<void(SQLite& db)> execute[] = {
     Books,
     BooksSortByAuthor,
     BooksSortByTitle,
+    BooksSortByYear,
     BooksFindByAuthor,
     BooksFindByTitle,
     BookAdd,
@@ -94,6 +98,12 @@ void BooksSortByTitle(SQLite& db) {
     db.show();
 }
 
+void BooksSortByYear(SQLite& db) {
+    cout << "List books (sort by year):" << endl;
+    db.select(queryBooksSortByYear);
+    db.show();
+}
+
 void BooksFindByAuthor(SQLite& db) {
     string last_name;
     cout << "Find books by author last name > ";
@@ -114,6 +124,7 @@ void BookAdd(SQLite& db) {
     string title;
     string first_name;
     string last_name;
+    string year;
     cout << "Add book:" << endl;
     cout << "Title > ";
     getline(cin, title);
@@ -121,7 +132,10 @@ void BookAdd(SQLite& db) {
     getline(cin, first_name);
     cout << "Author last name > ";
     getline(cin, last_name);
-    if (!db.execute(queryBookAdd, title.data(), first_name.data(), last_name.data()))
+    cout << "Book finished year > ";
+    getline(cin, year);
+
+    if (!db.execute(queryBookAdd, title.data(), first_name.data(), last_name.data(), year.data()))
         db.message("Could not add row.");
 }
 
